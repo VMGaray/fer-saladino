@@ -36,16 +36,20 @@ export default function PerfilView() {
       setName(session.user.user_metadata?.full_name ?? "");
       setLoadingUser(false);
 
-      supabase
-        .from("orders")
-        .select("*")
-        .eq("user_id", session.user.id)
-        .order("created_at", { ascending: false })
-        .then(({ data: rows }) => {
+      (async () => {
+        try {
+          const { data: rows } = await supabase
+            .from("orders")
+            .select("*")
+            .eq("user_id", session.user.id)
+            .order("created_at", { ascending: false });
           setOrders((rows as Order[]) ?? []);
+        } catch {
+          // error handled silently
+        } finally {
           setLoadingOrders(false);
-        })
-        .catch(() => setLoadingOrders(false));
+        }
+      })();
     });
   }, [router]);
 
