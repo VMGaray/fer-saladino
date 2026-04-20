@@ -18,6 +18,15 @@ interface Product {
   featured: boolean;
   slug: string;
 }
+// Interfaz más ligera para productos relacionados
+interface RelatedProduct {
+  id: string;
+  name: string;
+  price: number;
+  image_url: string;
+  slug: string;
+  category: string;
+}
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -32,7 +41,7 @@ export default function ProductDetail({ params }: PageProps) {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [addedToCart, setAddedToCart] = useState(false);
-  const [related, setRelated] = useState<Product[]>([]);
+  const [related, setRelated] = useState<RelatedProduct[]>([]);
 
   useEffect(() => {
     async function fetchProduct() {
@@ -49,23 +58,26 @@ export default function ProductDetail({ params }: PageProps) {
   }, [slug]);
 
   useEffect(() => {
-    if (!product) return;
-    async function fetchRelated() {
-      const { data } = await supabase
-        .from("products")
-        .select("id, name, price, image_url, slug, category")
-        .eq("category", product!.category)
-        .neq("id", product!.id)
-        .limit(4);
-      setRelated(data ?? []);
-    }
-    fetchRelated();
-  }, [product]);
+  if (!product) return;
+
+  async function fetchRelated() {
+    const { data } = await supabase
+      .from("products")
+      .select("id, name, price, image_url, slug, category")
+      .eq("category", product!.category)
+      .neq("id", product!.id)
+      .limit(4);
+
+    setRelated(data ?? []);   // ← Ahora debería funcionar sin error
+  }
+
+  fetchRelated();
+}, [product]);
 
   const handleAddToCart = () => {
     if (!product) return;
     addToCart({
-      id: product.id,
+      id: product.id as any,
       name: product.name,
       price: product.price,
       image_url: product.image_url,
