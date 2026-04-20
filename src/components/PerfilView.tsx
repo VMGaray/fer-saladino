@@ -27,30 +27,30 @@ export default function PerfilView() {
   const [loadingOrders, setLoadingOrders] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session?.user) {
-        router.push("/");
-        return;
-      }
-      setEmail(session.user.email ?? "");
-      setName(session.user.user_metadata?.full_name ?? "");
-      setLoadingUser(false);
+    async function fetchOrders() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) { router.push("/"); return; }
 
-      (async () => {
-        try {
-          const { data: rows } = await supabase
-            .from("orders")
-            .select("*")
-            .eq("user_id", session.user.id)
-            .order("created_at", { ascending: false });
-          setOrders((rows as Order[]) ?? []);
-        } catch {
-          // error handled silently
-        } finally {
-          setLoadingOrders(false);
-        }
-      })();
-    });
+        setEmail(user.email ?? "");
+        setName(user.user_metadata?.full_name ?? "");
+        setLoadingUser(false);
+
+        const { data, error } = await supabase
+          .from("orders")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false });
+
+        if (!error && data) setOrders(data as Order[]);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoadingOrders(false);
+      }
+    }
+
+    fetchOrders();
   }, [router]);
 
   const handleSignOut = async () => {
