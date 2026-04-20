@@ -18,6 +18,7 @@ interface Product {
   featured: boolean;
   slug: string;
 }
+
 // Interfaz más ligera para productos relacionados
 interface RelatedProduct {
   id: string;
@@ -43,6 +44,7 @@ export default function ProductDetail({ params }: PageProps) {
   const [addedToCart, setAddedToCart] = useState(false);
   const [related, setRelated] = useState<RelatedProduct[]>([]);
 
+  // Fetch del producto principal
   useEffect(() => {
     async function fetchProduct() {
       const { data } = await supabase
@@ -57,32 +59,36 @@ export default function ProductDetail({ params }: PageProps) {
     fetchProduct();
   }, [slug]);
 
+  // Fetch de productos relacionados
   useEffect(() => {
-  if (!product) return;
+    if (!product) return;
 
-  async function fetchRelated() {
-    const { data } = await supabase
-      .from("products")
-      .select("id, name, price, image_url, slug, category")
-      .eq("category", product!.category)
-      .neq("id", product!.id)
-      .limit(4);
+    async function fetchRelated() {
+      const { data } = await supabase
+        .from("products")
+        .select("id, name, price, image_url, slug, category")
+        .eq("category", product.category)
+        .neq("id", product.id)
+        .limit(4);
 
-    setRelated(data ?? []);   // ← Ahora debería funcionar sin error
-  }
+      // ✅ Corrección principal del error de TypeScript
+      setRelated((data as RelatedProduct[]) ?? []);
+    }
 
-  fetchRelated();
-}, [product]);
+    fetchRelated();
+  }, [product]);
 
   const handleAddToCart = () => {
     if (!product) return;
+
     addToCart({
-      id: product.id as any,
+      id: product.id as any, // Temporal - idealmente cambiar en CartContext a string
       name: product.name,
       price: product.price,
       image_url: product.image_url,
       category: product.category,
     });
+
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
   };
@@ -144,7 +150,7 @@ export default function ProductDetail({ params }: PageProps) {
         {/* Grid principal */}
         <div className="grid md:grid-cols-2 gap-12 md:gap-24">
 
-          {/* IZQUIERDA: Galería */}
+          {/* Galería */}
           <div>
             <ProductImageGallery
               images={productImages}
@@ -152,12 +158,10 @@ export default function ProductDetail({ params }: PageProps) {
             />
           </div>
 
-          {/* DERECHA: Info */}
+          {/* Información del producto */}
           <div className="flex flex-col justify-center space-y-8">
-
-            {/* Nombre y categoría */}
+            {/* Nombre, categoría y favorito */}
             <div style={{ borderBottom: "1px solid rgba(212,175,55,0.1)", paddingBottom: "24px" }}>
-              {/* Botón favorito */}
               <button
                 onClick={() => toggleFavorite(product.id)}
                 style={{
@@ -195,6 +199,7 @@ export default function ProductDetail({ params }: PageProps) {
                   Destacado
                 </span>
               )}
+
               <h1
                 className="font-light uppercase mb-3"
                 style={{ fontSize: "clamp(24px, 4vw, 36px)", letterSpacing: "0.25em" }}
@@ -225,7 +230,7 @@ export default function ProductDetail({ params }: PageProps) {
               </p>
             </div>
 
-            {/* Características fijas */}
+            {/* Características */}
             <div className="space-y-2" style={{ borderTop: "1px solid rgba(212,175,55,0.08)", paddingTop: "20px" }}>
               {["100% Cuero Argentino", "Confección Artesanal", "Diseño Exclusivo", "Edición Limitada"].map(feat => (
                 <div key={feat} className="flex items-center gap-3">
@@ -306,7 +311,6 @@ export default function ProductDetail({ params }: PageProps) {
                 Envíos a todo el país · Embalaje de regalo incluido · Atención por WhatsApp
               </p>
             </div>
-
           </div>
         </div>
 
@@ -350,7 +354,6 @@ export default function ProductDetail({ params }: PageProps) {
             </div>
           </div>
         )}
-
       </div>
     </main>
   );
