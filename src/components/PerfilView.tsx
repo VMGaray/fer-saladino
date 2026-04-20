@@ -12,10 +12,10 @@ interface Order {
 }
 
 const STATUS_STYLES: Record<string, { label: string; color: string }> = {
-  pendiente:  { label: "Pendiente",  color: "rgba(192,192,192,0.5)" },
+  pendiente: { label: "Pendiente", color: "rgba(192,192,192,0.5)" },
   confirmado: { label: "Confirmado", color: "#D4AF37" },
-  enviado:    { label: "Enviado",    color: "#4A9EBF" },
-  entregado:  { label: "Entregado",  color: "#5A9E6F" },
+  enviado: { label: "Enviado", color: "#4A9EBF" },
+  entregado: { label: "Entregado", color: "#5A9E6F" },
 };
 
 export default function PerfilView() {
@@ -29,8 +29,13 @@ export default function PerfilView() {
   useEffect(() => {
     async function fetchOrders() {
       try {
+        setLoadingOrders(true);
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user) { router.push("/"); return; }
+
+        if (!user) {
+          router.push("/");
+          return;
+        }
 
         setEmail(user.email ?? "");
         setName(user.user_metadata?.full_name ?? "");
@@ -42,9 +47,10 @@ export default function PerfilView() {
           .eq("user_id", user.id)
           .order("created_at", { ascending: false });
 
-        if (!error && data) setOrders(data as Order[]);
+        if (error) throw error;
+        if (data) setOrders(data as Order[]);
       } catch (e) {
-        console.error(e);
+        console.error("Error al cargar pedidos:", e);
       } finally {
         setLoadingOrders(false);
       }
@@ -54,8 +60,12 @@ export default function PerfilView() {
   }, [router]);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push("/");
+    try {
+      await supabase.auth.signOut();
+      router.push("/");
+    } catch (e) {
+      console.error("Error al cerrar sesión:", e);
+    }
   };
 
   const sectionTitle = (text: string) => (
@@ -79,7 +89,6 @@ export default function PerfilView() {
 
   return (
     <main style={{ maxWidth: "720px", margin: "0 auto", padding: "72px 40px" }}>
-
       {/* Encabezado */}
       <div style={{ marginBottom: "64px" }}>
         <div style={{ width: 30, height: 1, background: "#D4AF37", marginBottom: "20px" }} />
@@ -158,7 +167,7 @@ export default function PerfilView() {
             {orders.map(order => {
               const status = STATUS_STYLES[order.status] ?? { label: order.status, color: "rgba(192,192,192,0.5)" };
               const date = new Date(order.created_at).toLocaleDateString("es-AR", { day: "2-digit", month: "long", year: "numeric" });
-              const items: Order["items"] = Array.isArray(order.items) ? order.items : [];
+              const items = Array.isArray(order.items) ? order.items : [];
 
               return (
                 <div
@@ -213,7 +222,6 @@ export default function PerfilView() {
           </div>
         )}
       </section>
-
     </main>
   );
 }
