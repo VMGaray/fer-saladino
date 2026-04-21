@@ -7,7 +7,7 @@ interface CategoryViewProps {
 
 export default async function CategoryView({ slug }: CategoryViewProps) {
   const safeSlug = slug || "";
-  const categoryName = safeSlug.replace(/-/g, " ");
+  const categoryName = decodeURIComponent(safeSlug).replace(/-/g, " ");
 
   const { data: products } = await supabase
     .from("products")

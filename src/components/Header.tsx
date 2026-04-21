@@ -121,7 +121,7 @@ export default function Header() {
                     {carterasSub.map(sub => (
                       <Link
                         key={sub}
-                        href={`/categoria/${sub.toLowerCase().replace(/ /g, "-")}`}
+                        href={`/categoria/${encodeURIComponent(sub.toLowerCase().replace(/ /g, "-"))}`}
                         className="block transition-all duration-150 hover:pl-[22px]"
                         style={{ padding: "7px 18px", color: "rgba(245,245,247,0.55)", fontSize: "9.5px", letterSpacing: "0.18em", textTransform: "uppercase", textDecoration: "none" }}
                         onMouseEnter={e => (e.currentTarget.style.color = "#F5F5F7")}
@@ -154,7 +154,7 @@ export default function Header() {
                     {accesoriosSub.map(sub => (
                       <Link
                         key={sub}
-                        href={`/categoria/${sub.toLowerCase().replace(/ /g, "-")}`}
+                        href={`/categoria/${encodeURIComponent(sub.toLowerCase().replace(/ /g, "-"))}`}
                         className="block transition-all duration-150"
                         style={{ padding: "7px 18px", color: "rgba(245,245,247,0.55)", fontSize: "9.5px", letterSpacing: "0.18em", textTransform: "uppercase", textDecoration: "none" }}
                         onMouseEnter={e => (e.currentTarget.style.color = "#F5F5F7")}
@@ -432,7 +432,7 @@ export default function Header() {
                   {carterasSub.map(sub => (
                     <Link
                       key={sub}
-                      href={`/categoria/${sub.toLowerCase().replace(/ /g, "-")}`}
+                      href={`/categoria/${encodeURIComponent(sub.toLowerCase().replace(/ /g, "-"))}`}
                       onClick={() => setMobileMenuOpen(false)}
                       style={{ display: "block", padding: "11px 0", color: "rgba(245,245,247,0.5)", fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderBottom: "1px solid rgba(245,245,247,0.04)" }}
                     >
@@ -465,7 +465,7 @@ export default function Header() {
                   {accesoriosSub.map(sub => (
                     <Link
                       key={sub}
-                      href={`/categoria/${sub.toLowerCase().replace(/ /g, "-")}`}
+                      href={`/categoria/${encodeURIComponent(sub.toLowerCase().replace(/ /g, "-"))}`}
                       onClick={() => setMobileMenuOpen(false)}
                       style={{ display: "block", padding: "11px 0", color: "rgba(245,245,247,0.5)", fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", borderBottom: "1px solid rgba(245,245,247,0.04)" }}
                     >

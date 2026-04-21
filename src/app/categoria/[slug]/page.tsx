@@ -7,7 +7,7 @@ interface GenerateMetadataProps {
 
 export async function generateMetadata({ params }: GenerateMetadataProps): Promise<Metadata> {
   const { slug } = await params;
-  const categoryName = slug.replace(/-/g, " ");
+  const categoryName = decodeURIComponent(slug).replace(/-/g, " ");
   const title = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
   return {
     title,
