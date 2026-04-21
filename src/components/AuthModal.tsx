@@ -69,7 +69,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     });
     setLoading(false);
     if (error) {
-      setError("No se pudo crear la cuenta. Intentá con otro email.");
+      console.error("Error registro completo:", error);
+      setError(error.message);
       return;
     }
     if (data.session) {
