@@ -157,14 +157,14 @@ export default function Cart() {
                         <div className="flex items-center gap-3 mt-2">
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            className="w-6 h-6 border border-brand-accent/30 hover:bg-brand-accent hover:text-brand-black transition-colors flex items-center justify-center"
+                            className="w-11 h-11 sm:w-7 sm:h-7 border border-brand-accent/30 hover:bg-brand-accent hover:text-brand-black transition-colors flex items-center justify-center text-base sm:text-sm"
                           >
                             -
                           </button>
                           <span className="text-sm w-8 text-center">{item.quantity}</span>
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            className="w-6 h-6 border border-brand-accent/30 hover:bg-brand-accent hover:text-brand-black transition-colors flex items-center justify-center"
+                            className="w-11 h-11 sm:w-7 sm:h-7 border border-brand-accent/30 hover:bg-brand-accent hover:text-brand-black transition-colors flex items-center justify-center text-base sm:text-sm"
                           >
                             +
                           </button>

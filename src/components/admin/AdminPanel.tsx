@@ -83,7 +83,7 @@ export default function AdminPanel() {
   const [tab, setTab] = useState<Tab>("productos");
 
   return (
-    <div style={{ minHeight: "100vh", background: "#121212", color: "#F5F5F7", padding: "40px" }}>
+    <div style={{ minHeight: "100vh", background: "#121212", color: "#F5F5F7", padding: "clamp(16px, 5vw, 40px)" }}>
 
       {/* Header */}
       <div style={{ marginBottom: "40px" }}>
@@ -94,30 +94,33 @@ export default function AdminPanel() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: "flex", borderBottom: "1px solid rgba(245,245,247,0.08)", marginBottom: "40px" }}>
-        {(["productos", "pedidos", "estadisticas"] as Tab[]).map(t => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              background: "transparent",
-              border: "none",
-              borderBottom: tab === t ? "1px solid #D4AF37" : "1px solid transparent",
-              marginBottom: "-1px",
-              padding: "0 0 12px",
-              marginRight: "40px",
-              cursor: "pointer",
-              fontSize: "9px",
-              letterSpacing: "0.3em",
-              textTransform: "uppercase",
-              fontWeight: 300,
-              color: tab === t ? "#D4AF37" : "rgba(245,245,247,0.35)",
-              transition: "color 0.2s",
-            }}
-          >
-            {t === "estadisticas" ? "Estadísticas" : t.charAt(0).toUpperCase() + t.slice(1)}
-          </button>
-        ))}
+      <div style={{ overflowX: "auto", marginBottom: "40px", borderBottom: "1px solid rgba(245,245,247,0.08)" }}>
+        <div style={{ display: "flex", minWidth: "max-content" }}>
+          {(["productos", "pedidos", "estadisticas"] as Tab[]).map(t => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              style={{
+                background: "transparent",
+                border: "none",
+                borderBottom: tab === t ? "1px solid #D4AF37" : "1px solid transparent",
+                marginBottom: "-1px",
+                padding: "0 0 12px",
+                marginRight: "28px",
+                cursor: "pointer",
+                fontSize: "9px",
+                letterSpacing: "0.3em",
+                textTransform: "uppercase",
+                fontWeight: 300,
+                color: tab === t ? "#D4AF37" : "rgba(245,245,247,0.35)",
+                transition: "color 0.2s",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {t === "estadisticas" ? "Estadísticas" : t.charAt(0).toUpperCase() + t.slice(1)}
+            </button>
+          ))}
+        </div>
       </div>
 
       {tab === "productos"   && <TabProductos />}
@@ -180,7 +183,7 @@ function TabProductos() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px", gap: "12px", flexWrap: "wrap" }}>
         <p style={labelStyle}>{products.length} productos</p>
         <button
           onClick={() => setFormMode("create")}

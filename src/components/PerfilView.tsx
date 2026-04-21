@@ -88,7 +88,7 @@ export default function PerfilView() {
   }
 
   return (
-    <main style={{ maxWidth: "720px", margin: "0 auto", padding: "72px 40px" }}>
+    <main style={{ maxWidth: "720px", margin: "0 auto", padding: "clamp(40px, 8vw, 72px) clamp(16px, 5vw, 40px)" }}>
       {/* Encabezado */}
       <div style={{ marginBottom: "64px" }}>
         <div style={{ width: 30, height: 1, background: "#D4AF37", marginBottom: "20px" }} />
@@ -174,10 +174,10 @@ export default function PerfilView() {
                   key={order.id}
                   style={{
                     border: "1px solid rgba(245,245,247,0.06)",
-                    padding: "20px 24px",
+                    padding: "16px clamp(12px, 4vw, 24px)",
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "14px", gap: "8px", flexWrap: "wrap" }}>
                     <p style={{ fontSize: "8.5px", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(245,245,247,0.35)", fontWeight: 300, margin: 0 }}>
                       {date}
                     </p>
@@ -189,6 +189,7 @@ export default function PerfilView() {
                       color: status.color,
                       border: `1px solid ${status.color}`,
                       padding: "3px 10px",
+                      flexShrink: 0,
                     }}>
                       {status.label}
                     </span>
@@ -197,11 +198,11 @@ export default function PerfilView() {
                   {items.length > 0 && (
                     <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginBottom: "14px" }}>
                       {items.map((item, i) => (
-                        <div key={i} style={{ display: "flex", justifyContent: "space-between" }}>
-                          <p style={{ fontSize: "10px", letterSpacing: "0.1em", color: "rgba(245,245,247,0.6)", fontWeight: 300, margin: 0 }}>
+                        <div key={i} style={{ display: "flex", justifyContent: "space-between", gap: "8px", alignItems: "baseline" }}>
+                          <p style={{ fontSize: "10px", letterSpacing: "0.1em", color: "rgba(245,245,247,0.6)", fontWeight: 300, margin: 0, minWidth: 0, wordBreak: "break-word" }}>
                             {item.name} <span style={{ color: "rgba(245,245,247,0.3)" }}>× {item.quantity}</span>
                           </p>
-                          <p style={{ fontSize: "10px", letterSpacing: "0.08em", color: "rgba(245,245,247,0.5)", fontWeight: 300, margin: 0 }}>
+                          <p style={{ fontSize: "10px", letterSpacing: "0.08em", color: "rgba(245,245,247,0.5)", fontWeight: 300, margin: 0, flexShrink: 0, whiteSpace: "nowrap" }}>
                             ${item.price.toLocaleString("es-AR")}
                           </p>
                         </div>

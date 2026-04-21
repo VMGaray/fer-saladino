@@ -152,7 +152,7 @@ export default function ProductForm({ initialData, onSuccess, onCancel }: Produc
 
   return (
     <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+      <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: "20px" }}>
         <div style={{ gridColumn: "1 / -1" }}>
           <label style={labelStyle}>Nombre</label>
           <input style={inputStyle} value={name} onChange={e => setName(e.target.value)} required />
@@ -300,13 +300,14 @@ export default function ProductForm({ initialData, onSuccess, onCancel }: Produc
       </div>
 
       {/* Acciones */}
-      <div style={{ display: "flex", gap: "12px", marginTop: "8px" }}>
+      <div style={{ display: "flex", gap: "12px", marginTop: "8px", flexWrap: "wrap" }}>
         <button
           type="submit"
           disabled={loading || uploadingImage}
           style={{
             flex: 1,
-            padding: "12px",
+            minWidth: "160px",
+            padding: "14px 12px",
             background: "transparent",
             border: "1px solid rgba(212,175,55,0.5)",
             color: "#D4AF37",
@@ -325,7 +326,9 @@ export default function ProductForm({ initialData, onSuccess, onCancel }: Produc
             type="button"
             onClick={onCancel}
             style={{
-              padding: "12px 20px",
+              flex: 1,
+              minWidth: "120px",
+              padding: "14px 20px",
               background: "transparent",
               border: "1px solid rgba(245,245,247,0.1)",
               color: "rgba(245,245,247,0.4)",
