@@ -23,6 +23,15 @@ export const metadata: Metadata = {
   },
   description: "Carteras, bolsos y accesorios artesanales en cuero argentino de primera calidad. Diseños exclusivos hechos a mano.",
   keywords: ["carteras de cuero", "bolsos artesanales", "cuero argentino", "accesorios de cuero", "handmade leather"],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Fernanda Saladino",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
   openGraph: {
     type: "website",
     locale: "es_AR",
@@ -45,6 +54,9 @@ export default function RootLayout({
       lang="es"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <meta name="theme-color" content="#121212" />
+      </head>
       <body className="min-h-full flex flex-col">
         <CartProvider>
           <FavoritesProvider>
