@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fernanda Saladino — E-commerce de Cuero Artesanal
 
-## Getting Started
+Tienda online para Fernanda Saladino, artesana argentina especializada en carteras, bolsos y accesorios de cuero hechos a mano. Proyecto freelance desarrollado de punta a punta: diseño, frontend, backend y deploy.
 
-First, run the development server:
+🔗 **Demo en vivo:** [fernanda-saladino.vercel.app](https://fernanda-saladino.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Stack tecnológico
+
+- **Frontend:** Next.js 15 (App Router), TypeScript, Tailwind CSS
+- **Backend / Base de datos:** Supabase (PostgreSQL + Auth + Storage + RLS)
+- **Deploy:** Vercel
+- **PWA:** Instalable como app en Android e iOS
+
+---
+
+## Funcionalidades
+
+### Tienda
+- Catálogo de productos con filtro por categoría
+- Búsqueda en tiempo real con debounce
+- Página de producto con galería de imágenes múltiples
+- Carrito persistente (localStorage)
+- Flujo de compra vía WhatsApp (sin pasarela de pagos)
+- Favoritos con persistencia
+- Sistema de autenticación completo (registro, login, logout)
+- Historial de pedidos por usuario
+- Gift Card con animación flip
+- Diseño responsive + PWA instalable
+
+### Panel de administración (`/admin`)
+- Acceso protegido por rol (`admin`) con RLS en Supabase
+- CRUD completo de productos con subida de imágenes múltiples a Supabase Storage
+- Gestión de pedidos con cambio de estados (pendiente → confirmado → enviado → entregado)
+- Estadísticas: ventas totales, pedidos por estado, productos más vendidos
+- Redirect automático al admin al loguearse como administrador
+
+---
+
+## Arquitectura
+
+```
+src/
+├── app/                  # Rutas Next.js App Router
+│   ├── admin/            # Panel de administración (protegido)
+│   ├── catalogo/         # Catálogo general
+│   ├── categoria/[slug]/ # Categorías dinámicas
+│   ├── producto/[slug]/  # Página de producto dinámica
+│   ├── perfil/           # Perfil y historial de pedidos
+│   ├── favoritos/        # Lista de favoritos
+│   └── gift-card/        # Página Gift Card
+├── components/
+│   ├── admin/            # Componentes del panel admin
+│   ├── Header.tsx        # Header con scroll hide/show
+│   ├── Footer.tsx        # Footer con links y contacto
+│   ├── Cart.tsx          # Carrito lateral con checkout WhatsApp
+│   ├── ProductDetail.tsx # Página de producto
+│   ├── AuthModal.tsx     # Modal login/registro
+│   └── ...
+├── context/
+│   ├── CartContext.tsx   # Estado global del carrito
+│   └── FavoritesContext.tsx
+├── hooks/
+│   └── useScrollHeader.ts
+└── lib/
+    └── supabase.ts       # Cliente Supabase
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Base de datos (Supabase)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Tabla | Descripción |
+|-------|-------------|
+| `products` | Productos con slug, imágenes, stock, featured |
+| `orders` | Pedidos con items en JSONB, estado y user_id |
+| `profiles` | Perfiles de usuario con rol (user/admin) |
 
-## Learn More
+Todas las tablas tienen **Row Level Security (RLS)** configurado.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Variables de entorno
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```env
+NEXT_PUBLIC_SUPABASE_URL=tu_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Instalación local
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+git clone https://github.com/VMGaray/fernanda-saladino.git
+cd fernanda-saladino
+npm install
+cp .env.example .env.local  # completar con tus keys de Supabase
+npm run dev
+```
+
+---
+
+## Desarrollado por
+
+**Victoria Garay** — Desarrolladora Frontend Freelance  
+[@vmg.setup.ai](https://www.instagram.com/vmg.setup.ai/) · Argentina
+
+---
+
+*Proyecto freelance · 2026*
